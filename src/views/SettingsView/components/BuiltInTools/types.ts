@@ -73,7 +73,9 @@ export interface BuiltInToolQueries {
 
 const BUILT_IN_TOOL_EMPTY_CONFIG_IDS = new Set([
     'file_search',
+    'memory',
     'read',
+    'search_conversation',
     'setting',
     'web_fetch',
     'show_widget',
@@ -91,8 +93,16 @@ export function getBuiltInToolSummary(toolId: string, description?: string | nul
         return '搜索本机文件';
     }
 
+    if (toolId === 'memory') {
+        return '读取和维护长期记忆';
+    }
+
     if (toolId === 'read') {
         return '读取本地文件或目录，支持图片与 PDF';
+    }
+
+    if (toolId === 'search_conversation') {
+        return '搜索历史对话';
     }
 
     if (toolId === 'setting') {

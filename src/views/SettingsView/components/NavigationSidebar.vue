@@ -5,6 +5,7 @@
     export type NavigationSection =
         | 'general'
         | 'ai-services'
+        | 'memory'
         | 'mcp-tools'
         | 'built-in-tools'
         | 'data-management'
@@ -30,6 +31,7 @@
     const navigationItems: NavigationItem[] = [
         { id: 'general', icon: 'settings', label: '常规设置' },
         { id: 'ai-services', icon: 'llm', label: '大模型服务设置' },
+        { id: 'memory', icon: 'history', label: '长期记忆' },
         { id: 'built-in-tools', icon: 'tool', label: '内置工具' },
         { id: 'mcp-tools', icon: 'mcp', label: 'MCP 工具' },
         { id: 'data-management', icon: 'database', label: '数据管理' },

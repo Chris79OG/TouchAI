@@ -17,6 +17,7 @@
     const BuiltInToolsView = defineAsyncComponent(
         () => import('./components/BuiltInTools/index.vue')
     );
+    const MemoryView = defineAsyncComponent(() => import('./components/Memory/index.vue'));
     const McpToolsView = defineAsyncComponent(() => import('./components/McpTools/index.vue'));
     const DataManagementView = defineAsyncComponent(
         () => import('./components/DataManagement/index.vue')
@@ -89,6 +90,15 @@
                         <BuiltInToolsView />
                         <template #fallback>
                             <LoadingState message="正在加载内置工具..." />
+                        </template>
+                    </Suspense>
+                </div>
+
+                <div v-else-if="viewReady && activeSection === 'memory'" class="h-full">
+                    <Suspense>
+                        <MemoryView />
+                        <template #fallback>
+                            <LoadingState message="正在加载长期记忆..." />
                         </template>
                     </Suspense>
                 </div>
