@@ -261,7 +261,7 @@ jobs:
 
             - name: Upload coverage artifact
               if: needs.changes.outputs.docs_only != 'true'
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: frontend-coverage-report
                   path: apps/desktop/.coverage/unit
@@ -391,7 +391,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Upload installers
-              uses: actions/upload-artifact@v7.0.1
+              uses: actions/upload-artifact@v7
               with:
                   name: touchai-installers-windows-${{ steps.sha.outputs.short }}
                   path: |
@@ -400,7 +400,7 @@ jobs:
                   if-no-files-found: warn
 
             - name: Upload portable
-              uses: actions/upload-artifact@v7.0.1
+              uses: actions/upload-artifact@v7
               with:
                   name: touchai-portable-windows-${{ steps.sha.outputs.short }}
                   path: apps/desktop/src-tauri/target/release/TouchAI.exe
