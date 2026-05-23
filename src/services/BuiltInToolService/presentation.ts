@@ -78,6 +78,7 @@ function getBuiltInToolConversationVerb(
 interface ResolveBuiltInToolConversationSemanticOptions {
     semantic?: BuiltInToolConversationSemantic;
     result?: string;
+    resultOnly?: boolean;
 }
 
 function buildBuiltInToolConversationPresentationFromSemantic(
@@ -116,6 +117,10 @@ export function resolveBuiltInToolConversationSemantic(
             : null;
     if (semanticFromResult) {
         return semanticFromResult;
+    }
+
+    if (options.resultOnly) {
+        return null;
     }
 
     return tool.buildConversationSemantic(args);

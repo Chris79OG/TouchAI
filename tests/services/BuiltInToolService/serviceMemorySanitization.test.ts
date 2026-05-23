@@ -62,7 +62,7 @@ beforeEach(() => {
         id: 1,
         tool_id: toolId,
         display_name: toolId === 'search_conversation' ? 'SearchConversation' : 'Memory',
-        description: toolId === 'search_conversation' ? '搜索历史会话' : '读取和维护长期记忆',
+        description: toolId === 'search_conversation' ? '搜索历史会话' : '读取和维护记忆',
         enabled: 1,
         risk_level: 'medium',
         config_json: null,

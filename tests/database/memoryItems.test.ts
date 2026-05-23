@@ -6,8 +6,10 @@ import {
     createMemoryItem,
     disableMemoryItem,
     findEnabledMemoryDirectoryItems,
+    findMemoryDirectoryItems,
     findMemoryItemByNormalizedTitle,
     readEnabledMemoryItemsByIds,
+    readMemoryItemsByIds,
     touchMemoryItemsLastUsed,
     updateMemoryItem,
 } from '@/database/queries/memoryItems';
@@ -76,6 +78,33 @@ describe('memory item queries', () => {
         expect(request?.sql).not.toContain('"content"');
     });
 
+    it('lists all memory directory rows without content for settings management', async () => {
+        mockDatabaseRows([
+            {
+                id: 7,
+                title: fullMemoryRow.title,
+                applicability: fullMemoryRow.applicability,
+                enabled: 1,
+                updated_at: fullMemoryRow.updated_at,
+            },
+            {
+                id: 8,
+                title: 'Disabled workflow',
+                applicability: 'Visible in settings even while disabled.',
+                enabled: 0,
+                updated_at: '2026-05-21T00:00:00.000Z',
+            },
+        ]);
+
+        const rows = await findMemoryDirectoryItems();
+
+        expect(rows.map((row) => row.id)).toEqual([7, 8]);
+        const request = getLastDatabaseRequest()?.request;
+        expect(request?.sql).toContain('from "memory_items"');
+        expect(request?.sql).not.toContain('"memory_items"."enabled" = ?');
+        expect(request?.sql).not.toContain('"content"');
+    });
+
     it('reads only valid enabled memory ids', async () => {
         mockDatabaseRows([fullMemoryRow]);
 
@@ -91,8 +120,28 @@ describe('memory item queries', () => {
         expect(request?.params).not.toContain(0);
     });
 
+    it('reads valid memory ids regardless of enabled state for settings management', async () => {
+        mockDatabaseRows([fullMemoryRow, { ...fullMemoryRow, id: 8, enabled: 0 }]);
+
+        const rows = await readMemoryItemsByIds([7, 8, 8, 0, -1, 2.5]);
+
+        expect(rows.map((row) => row.id)).toEqual([7, 8]);
+        const request = getLastDatabaseRequest()?.request;
+        expect(request?.sql).toContain('from "memory_items"');
+        expect(request?.sql).not.toContain('"memory_items"."enabled" = ?');
+        expect(request?.params).toContain(7);
+        expect(request?.params).toContain(8);
+        expect(request?.params).not.toContain(0);
+    });
+
     it('skips database access when reading no valid ids', async () => {
         await expect(readEnabledMemoryItemsByIds([0, -1, 2.5])).resolves.toEqual([]);
+
+        expect(getTauriInvokeCalls('database_query')).toHaveLength(0);
+    });
+
+    it('skips database access when reading all memories with no valid ids', async () => {
+        await expect(readMemoryItemsByIds([0, -1, 2.5])).resolves.toEqual([]);
 
         expect(getTauriInvokeCalls('database_query')).toHaveLength(0);
     });

@@ -21,15 +21,41 @@ function buildMemoryConversationSemantic(
     try {
         const request = parseMemoryRequest(args);
         if (request.action === 'read') {
-            return { action: 'read', target: `长期记忆 ${request.ids.join(', ')}` };
+            return { action: 'read', target: `记忆(${request.ids.join(', ')})` };
         }
         if (request.action === 'delete') {
-            return { action: 'remove', target: `长期记忆 ${request.id}` };
+            return { action: 'remove', target: `记忆(${request.id})` };
         }
         return { action: 'update', target: request.title };
     } catch {
-        return { action: 'process', target: '长期记忆' };
+        return { action: 'process', target: '记忆' };
     }
+}
+
+function parseMemoryReadTitlesFromResult(result: string): string[] {
+    const titles: string[] = [];
+    const titlePattern = /^\s*title_untrusted:\s*(.+?)\s*$/gm;
+    let match: RegExpExecArray | null;
+
+    while ((match = titlePattern.exec(result)) !== null) {
+        const rawTitle = match[1]?.trim();
+        if (!rawTitle) {
+            continue;
+        }
+
+        try {
+            const parsed = JSON.parse(rawTitle) as unknown;
+            if (typeof parsed === 'string' && parsed.trim()) {
+                titles.push(parsed.trim());
+            }
+        } catch {
+            if (rawTitle) {
+                titles.push(rawTitle);
+            }
+        }
+    }
+
+    return titles;
 }
 
 class MemoryTool extends BuiltInTool<Record<string, never>> {
@@ -41,6 +67,29 @@ class MemoryTool extends BuiltInTool<Record<string, never>> {
 
     override buildConversationSemantic(args: Record<string, unknown>) {
         return buildMemoryConversationSemantic(args);
+    }
+
+    override buildConversationSemanticFromResult(result: string, args: Record<string, unknown>) {
+        let request: ReturnType<typeof parseMemoryRequest>;
+        try {
+            request = parseMemoryRequest(args);
+        } catch {
+            return null;
+        }
+
+        if (request.action !== 'read') {
+            return null;
+        }
+
+        const titles = parseMemoryReadTitlesFromResult(result);
+        if (titles.length === 0) {
+            return null;
+        }
+
+        return {
+            action: 'read' as const,
+            target: `记忆(${titles.join(', ')})`,
+        };
     }
 
     override buildApprovalRequest(args: Record<string, unknown>) {

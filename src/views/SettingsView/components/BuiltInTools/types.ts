@@ -94,7 +94,7 @@ export function getBuiltInToolSummary(toolId: string, description?: string | nul
     }
 
     if (toolId === 'memory') {
-        return '读取和维护长期记忆';
+        return '读取和维护记忆';
     }
 
     if (toolId === 'read') {

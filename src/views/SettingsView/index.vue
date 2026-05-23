@@ -98,7 +98,7 @@
                     <Suspense>
                         <MemoryView />
                         <template #fallback>
-                            <LoadingState message="正在加载长期记忆..." />
+                            <LoadingState message="正在加载记忆..." />
                         </template>
                     </Suspense>
                 </div>

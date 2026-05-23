@@ -75,7 +75,7 @@ function assertNoSecretLikeMemoryFields(data: {
         (value): value is string => typeof value === 'string'
     );
     if (fields.some((value) => containsSecretLikeContent(value))) {
-        throw new Error('Refusing to store secret-like content in long-term memory.');
+        throw new Error('Refusing to store secret-like content in memory.');
     }
 }
 
@@ -93,6 +93,19 @@ export const findEnabledMemoryDirectoryItems = async (): Promise<MemoryDirectory
         .orderBy(desc(memoryItems.updated_at), desc(memoryItems.id))
         .all();
 
+export const findMemoryDirectoryItems = async (): Promise<MemoryDirectoryItemEntity[]> =>
+    await db
+        .select({
+            id: memoryItems.id,
+            title: memoryItems.title,
+            applicability: memoryItems.applicability,
+            enabled: memoryItems.enabled,
+            updated_at: memoryItems.updated_at,
+        })
+        .from(memoryItems)
+        .orderBy(desc(memoryItems.enabled), desc(memoryItems.updated_at), desc(memoryItems.id))
+        .all();
+
 export const readEnabledMemoryItemsByIds = async (ids: number[]): Promise<MemoryItemEntity[]> => {
     const uniqueIds = normalizeMemoryIds(ids);
     if (uniqueIds.length === 0) {
@@ -104,6 +117,20 @@ export const readEnabledMemoryItemsByIds = async (ids: number[]): Promise<Memory
         .from(memoryItems)
         .where(and(eq(memoryItems.enabled, 1), inArray(memoryItems.id, uniqueIds)))
         .orderBy(desc(memoryItems.updated_at), desc(memoryItems.id))
+        .all();
+};
+
+export const readMemoryItemsByIds = async (ids: number[]): Promise<MemoryItemEntity[]> => {
+    const uniqueIds = normalizeMemoryIds(ids);
+    if (uniqueIds.length === 0) {
+        return [];
+    }
+
+    return await db
+        .select()
+        .from(memoryItems)
+        .where(inArray(memoryItems.id, uniqueIds))
+        .orderBy(desc(memoryItems.enabled), desc(memoryItems.updated_at), desc(memoryItems.id))
         .all();
 };
 

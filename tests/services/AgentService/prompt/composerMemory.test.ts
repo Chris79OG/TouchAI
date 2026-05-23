@@ -8,12 +8,12 @@ describe('composePromptSnapshot memory fragments', () => {
 
         const snapshot = await composePromptSnapshot({
             prompt: '继续昨天的桌面任务',
-            sessionMemory: ['# 长期记忆目录\n- id: 1\n  title: 桌面工作流'],
+            sessionMemory: ['# 记忆目录\n- id: 1\n  title: 桌面工作流'],
         });
 
         expect(snapshot.fragments.some((fragment) => fragment.source === 'session_memory')).toBe(
             true
         );
-        expect(snapshot.systemPrompt).toContain('长期记忆目录');
+        expect(snapshot.systemPrompt).toContain('记忆目录');
     });
 });

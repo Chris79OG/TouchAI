@@ -171,7 +171,7 @@ export interface SettingEntity {
     updated_at: string;
 }
 
-// ==================== 长期记忆 ====================
+// ==================== 记忆 ====================
 
 export interface MemoryItemEntity {
     id: number;

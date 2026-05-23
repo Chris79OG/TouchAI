@@ -35,7 +35,7 @@ describe('buildMemoryDirectoryPrompt', () => {
         const fragments = await buildMemoryDirectoryPrompt();
 
         expect(fragments).toHaveLength(1);
-        expect(fragments[0]).toContain('长期记忆目录');
+        expect(fragments[0]).toContain('记忆目录');
         expect(fragments[0]).toContain('"id":7');
         expect(fragments[0]).toContain('"title":"桌面工作流偏好"');
         expect(fragments[0]).toContain('"applicability":"当任务涉及文件');

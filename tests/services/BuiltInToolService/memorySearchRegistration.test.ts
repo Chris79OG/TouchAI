@@ -26,7 +26,7 @@ describe('memory and conversation search registration', () => {
                 id: 1,
                 tool_id: 'memory',
                 display_name: 'Memory',
-                description: '读取和维护长期记忆',
+                description: '读取和维护记忆',
             },
             {
                 ...baseToolEntity,

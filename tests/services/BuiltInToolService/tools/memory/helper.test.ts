@@ -102,7 +102,7 @@ describe('memory tool helper', () => {
         ).resolves.toMatchObject({
             isError: true,
             status: 'error',
-            errorMessage: 'Refusing to store secret-like content in long-term memory.',
+            errorMessage: 'Refusing to store secret-like content in memory.',
         });
         expect(memoryQueries.createMemoryItem).not.toHaveBeenCalled();
         expect(memoryQueries.updateMemoryItem).not.toHaveBeenCalled();
@@ -118,12 +118,12 @@ describe('memory tool helper', () => {
             content: memoryRow.content,
         });
 
-        expect(approval?.title).toBe('长期记忆修改确认');
+        expect(approval?.title).toBe('记忆修改确认');
         expect(approval?.command).toContain('upsert');
         expect(approval?.command).toContain('content: 优先使用工具观察真实桌面上下文');
         expect(approval?.description).toContain(memoryRow.applicability);
         expect(approval?.description).toContain(memoryRow.content);
-        expect(approval?.reason).toContain('长期记忆');
+        expect(approval?.reason).toContain('记忆');
     });
 
     it('reads memory rows and touches last_used_at', async () => {

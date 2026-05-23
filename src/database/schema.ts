@@ -189,7 +189,7 @@ export const settings = sqliteTable('settings', {
 });
 
 /**
- * 长期记忆表。
+ * 记忆表。
  */
 export const memoryItems = sqliteTable(
     'memory_items',

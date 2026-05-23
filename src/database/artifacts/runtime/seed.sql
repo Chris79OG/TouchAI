@@ -114,7 +114,7 @@ WHERE NOT EXISTS (SELECT 1 FROM built_in_tools WHERE tool_id = 'file_search');
 INSERT INTO built_in_tools (
     tool_id, display_name, description, enabled, risk_level, config_json
 )
-SELECT 'memory', 'Memory', '读取和维护长期记忆', 1, 'medium', NULL
+SELECT 'memory', 'Memory', '读取和维护记忆', 1, 'medium', NULL
 WHERE NOT EXISTS (SELECT 1 FROM built_in_tools WHERE tool_id = 'memory');
 
 INSERT INTO built_in_tools (

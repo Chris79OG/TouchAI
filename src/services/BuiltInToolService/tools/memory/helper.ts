@@ -41,7 +41,7 @@ function assertNoSecretLikeMemoryContent(request: MemoryToolRequest): void {
             `${request.title}\n${request.applicability}\n${request.content}`
         )
     ) {
-        throw new Error('Refusing to store secret-like content in long-term memory.');
+        throw new Error('Refusing to store secret-like content in memory.');
     }
 }
 
@@ -146,11 +146,11 @@ export function buildMemoryApprovalRequest(
 
     if (request.action === 'delete') {
         return {
-            title: '长期记忆修改确认',
+            title: '记忆修改确认',
             description: `停用 memory_id: ${request.id}`,
             command: `delete memory_id=${request.id}`,
             riskLabel: '',
-            reason: '此操作会停用一条长期记忆，影响后续对话的上下文召回。',
+            reason: '此操作会停用一条记忆，影响后续对话的上下文召回。',
             commandLabel: '',
             approveLabel: '批准',
             rejectLabel: '拒绝',
@@ -163,7 +163,7 @@ export function buildMemoryApprovalRequest(
     const contentPreview = truncateText(request.content.replace(/\s+/g, ' '), 160);
 
     return {
-        title: '长期记忆修改确认',
+        title: '记忆修改确认',
         description: [`适用条件: ${request.applicability}`, `记忆内容预览: ${contentPreview}`].join(
             '\n'
         ),
@@ -171,7 +171,7 @@ export function buildMemoryApprovalRequest(
             '\n'
         ),
         riskLabel: '',
-        reason: '此操作会保存或更新 TouchAI 的长期记忆，并影响后续对话中的上下文召回。',
+        reason: '此操作会保存或更新 TouchAI 的记忆，并影响后续对话中的上下文召回。',
         commandLabel: '',
         approveLabel: '批准',
         rejectLabel: '拒绝',
